@@ -7,7 +7,7 @@ from langchain.chains.conversational_retrieval.base import   ConversationalRetri
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-
+from search_query import searchquery
 def main():
     st.title("Healtheart ")
     user_question = st.text_input("Ask your question about your health issue:")
@@ -51,7 +51,10 @@ def main():
             ("human",humanMessage),
         ]
         productList=CHAT_LLM.invoke(messages)
-        st.write(productList.content)
+        productList.content.split(",")
+        searchquery(productList.content.split(","))
+        st.write(productList.content.split(","))
+        # st.write(productList.content)
 
 
 if __name__ == "__main__":
