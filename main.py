@@ -45,6 +45,7 @@ def main():
         chain = create_retrieval_chain(vectorstore.as_retriever(search_kwargs={'k':10}), question_answer_chain)
         responseData= chain.invoke({"input": user_question})
         answerr = responseData['answer']
+        st.write(responseData)
         humanMessage= answerr
         messages = [
             ("system", SYSTEM_PROMPT_PRODUCTS),
@@ -52,9 +53,10 @@ def main():
         ]
         productList=CHAT_LLM.invoke(messages)
         productList.content.split(",")
-        searchquery(productList.content.split(","))
+        products = searchquery(productList.content.split(","))
         st.write(productList.content.split(","))
-        # st.write(productList.content)
+        st.write(products)
+       
 
 
 if __name__ == "__main__":
