@@ -112,7 +112,7 @@ human_prompt = PromptTemplate(template=human_prompt_template, input_variables=["
 
 # Initialize the language model (you can choose your model and configuration)
 openai_llm = ChatOpenAI(
-    model="gpt-4o-mini",
+    model="gpt-4o-2024-08-06",
     temperature=0.5,
     api_key= st.session_state.openai_key,
     streaming=True
