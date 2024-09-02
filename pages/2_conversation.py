@@ -6,6 +6,8 @@ from langchain.chains.llm import LLMChain
 from langchain_openai import ChatOpenAI
 from streamlit_extras.switch_page_button import switch_page
 
+if 'openai_key' not in st.session_state:
+    st.session_state.openai_key = ""
 st.set_page_config(initial_sidebar_state="collapsed")
 
 st.markdown(
@@ -159,7 +161,7 @@ def startConveration():
     # with st.form(key='user_input_form'):
     #     user_input = st.text_input("Ask your query to Chat PRD:", key="user_input")
     #     submit_button = st.form_submit_button(label='Send', on_click=handle_submit)
-    if prompt :=st.chat_input("Ask your query to Chat PRD:", key="user_input"):
+    if prompt :=st.chat_input("Ask your query:", key="user_input"):
         handle_submit()
         
         
@@ -193,8 +195,6 @@ if history:
         warningMarkdown()    
 else:
     warningMarkdown()            
-    
-
     if message["role"] == "human":
         # st.markdown(f"You:{message['content']}")
         with st.chat_message("user"):
