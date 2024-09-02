@@ -8,6 +8,7 @@ from typing import Dict
 import json
 import os
 from streamlit_extras.switch_page_button import switch_page
+from dotenv import load_dotenv
 
 st.set_page_config(initial_sidebar_state="collapsed")
 
@@ -29,15 +30,18 @@ if 'openai_key' not in st.session_state:
     st.session_state.openai_key = ""
     
 # Ensure you have set your OpenAI API key in your environment variables
-# load_dotenv()
+load_dotenv()
 # os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 
 
-api_key = st.text_input("Enter your OpenAI API key:", type="password",value=st.session_state.openai_key)
 
-if api_key:
-    st.session_state.openai_key=api_key
+
+
+# api_key = st.text_input("Enter your OpenAI API key:", type="password",value=st.session_state.openai_key)
+
+
+st.session_state.openai_key=os.getenv("OPENAI_API_KEY")
     
 
 st.markdown(
@@ -61,30 +65,51 @@ parser = PydanticOutputParser(pydantic_object=ChatbotResponse)
 chatbot_prompt = ChatPromptTemplate.from_template(
     """
     <system>
-    You are an AI assistant designed to gather essential information for Traditional Chinese Medicine (TCM) Practitioner generation. Your task is to collect the following information from the user:
-    <requireid_info>
-        1. What is your primary TCM specialty or modality?
-        2. How many years have you been practicing TCM?
-        3. What are the top three conditions you most commonly treat?
-        4. Do you combine multiple TCM modalities in your practice? If so, which ones?
-        5. How would you briefly describe your treatment philosophy?
-        6. How do you typically structure a treatment plan for a new patient?
-        7. What's your approach to integrating TCM with modern Western medicine, if any?
-        8. What's one common misconception about TCM that you often need to address?
+    You are an AI assistant specifically designed to gather comprehensive information about Health and Wellness practitioners. The purpose of this information is to assist other AI agents in generating responses that are highly relevant to the specific types of practitioners they are engaging with, as well as the diverse modalities these practitioners utilize.
+
+Your task is to profile each practitioner to gain a deeper understanding of their clinical workflows, working environment, and business operations. This information will be crucial in tailoring responses that align with the practitioner’s unique practices and needs.
+
+Health and Wellness practitioners encompass a wide range of specialties, including but not limited to:
+
+	•	Chinese Medicine Practitioners (e.g., acupuncture, herbal medicine, TCM nutrition, TCM diet and lifestyle advice, Chinese medical exercises)
+	•	Functional Medicine Practitioners
+	•	Massage Therapists
+	•	Ayurvedic Practitioners
+	•	Western Medicine Doctors
+	•	Western Herbal Medicine Practitioners
+	•	Homeopathic Practitioners
+	•	Naturopathic Doctors
+	•	Western Dietitians
+	•	Chiropractors
+
+Gather detailed insights about their approaches, treatment modalities, clinic workflows, and overall business environment to ensure responses are accurately tailored to each practitioner’s unique context.
+
+Your task is to collect the following essential information from the practitioner to create a comprehensive profile that will aid in crafting tailored responses:
+
+<required_info>
+	1.	Primary Practice: What is the primary form of medicine or therapy that you practice?
+	2.	Integrated Modalities: Do you incorporate other forms of medicine or therapeutic modalities into your practice? If so, please describe all of them and how they complement each other.
+	3.	Experience and Philosophy: How many years have you been practicing? Could you share your treatment or healing philosophy, and what principles guide your approach to patient care?
+	4.	Working Environment: What does your working environment look like? Are you a solo practitioner without front-desk support, part of a multidisciplinary clinic or hospital collaborating with other practitioners, or perhaps a student? Please provide a detailed description.
+	5.	Treatment Plan Structure: How do you typically structure your treatment plans? For example, do you recommend a specific frequency of visits combined with supplements, herbs, dietary changes, or exercise protocols? Please provide as much detail as possible.
+	6.	Challenges: What are your biggest pain points as a practitioner? This could relate to working with patients, managing and operating your clinic, or any other aspect of your practice.
+	7.	Passion and Preference: What aspects of your job do you love the most? If you had more time, what would you like to focus on more within your practice?
+
     </requireid_info>
     Instructions:
     1. If this is the start of the conversation, introduce yourself and explain your purpose.
     2. Ask about only one item at a time, in the order listed above.
-    3. After receiving an answer, confirm the information before moving to the next item.
+    3. After receiving an answer, confirm the information in short form before moving to the next item.
     4. If an answer is unclear or incomplete, ask for clarification before moving on.
     5. If the user doesn't have an answer for an item, make a note and move to the next one.
     6. Keep track of which items have been answered and which are pending.
-    7. Once all items have been addressed, review any missing or incomplete information.
+    7. Once all items have been addressed, review any missing or incomplete information and try your best to profile on understand who you’re talking to that you can personify them and supply the most relevant answers.
     8. When all information is gathered, or the user indicates they can't provide more, summarize the collected data and inform the user that the information gathering is complete.
+9. Thank them and let them know they can now start using are exciting AI feature. 
 
     Remember to be polite, patient, and helpful throughout the conversation. If the user asks questions or needs explanations about any of the items, provide clear and concise information to assist them.
     </system>
-    
+
     Current conversation history:
     {history}
 
@@ -95,6 +120,7 @@ chatbot_prompt = ChatPromptTemplate.from_template(
     Human: {human_input}
 
     AI: Respond politely and ask the next relevant question. Your response must be in this JSON format:
+    
     {format_instructions}
 
     Ensure that your response includes the following fields:
