@@ -8,41 +8,16 @@ from typing import Dict
 import json
 import os
 from streamlit_extras.switch_page_button import switch_page
-from dotenv import load_dotenv
+
 
 st.set_page_config(initial_sidebar_state="collapsed")
-
-# Sure! Here's a concise response for each question:
-
-# 1. **Primary TCM Specialty or Modality**: My primary specialty is acupuncture, though I also focus on herbal medicine.
-# 2. **Years of Practice**: I've been practicing TCM for over 10 years.
-# 3. **Top Three Conditions Treated**: I most commonly treat pain management, digestive issues, and stress-related disorders.
-# 4. **Combining Modalities**: Yes, I often combine acupuncture, herbal medicine, and cupping to enhance treatment outcomes.
-# 5. **Treatment Philosophy**: I believe in treating the root cause of illness, not just the symptoms, while balancing the body's energy.
-# 6. **Structuring a Treatment Plan**: I begin with a comprehensive diagnosis, then tailor a plan combining various TCM therapies, with regular follow-ups.
-# 7. **Integrating with Western Medicine**: I support a collaborative approach, integrating TCM with modern medicine to provide holistic care.
-# 8. **Common Misconception**: A common misconception is that TCM is only for chronic issues, but it can also be effective for acute conditions and preventive care.
-
-# Ensure you have set your OpenAI API key in your environment variables
-
-
 if 'openai_key' not in st.session_state:
-    st.session_state.openai_key = ""
-    
-# Ensure you have set your OpenAI API key in your environment variables
-load_dotenv()
-# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+    st.session_state.openai_key = st.secrets.get("openai", {}).get("api_key")
 
 
 
 
 
-
-# api_key = st.text_input("Enter your OpenAI API key:", type="password",value=st.session_state.openai_key)
-
-
-st.session_state.openai_key=os.getenv("OPENAI_API_KEY")
-    
 
 st.markdown(
     """
@@ -64,7 +39,7 @@ parser = PydanticOutputParser(pydantic_object=ChatbotResponse)
 
 chatbot_prompt = ChatPromptTemplate.from_template(
     """
-    <system>
+   <system>
     You are an AI assistant specifically designed to gather comprehensive information about Health and Wellness practitioners. The purpose of this information is to assist other AI agents in generating responses that are highly relevant to the specific types of practitioners they are engaging with, as well as the diverse modalities these practitioners utilize.
 
 Your task is to profile each practitioner to gain a deeper understanding of their clinical workflows, working environment, and business operations. This information will be crucial in tailoring responses that align with the practitioner’s unique practices and needs.
@@ -98,14 +73,12 @@ Your task is to collect the following essential information from the practitione
     </requireid_info>
     Instructions:
     1. If this is the start of the conversation, introduce yourself and explain your purpose.
-    2. Ask about only one item at a time, in the order listed above.
-    3. After receiving an answer, confirm the information in short form before moving to the next item.
     4. If an answer is unclear or incomplete, ask for clarification before moving on.
     5. If the user doesn't have an answer for an item, make a note and move to the next one.
     6. Keep track of which items have been answered and which are pending.
     7. Once all items have been addressed, review any missing or incomplete information and try your best to profile on understand who you’re talking to that you can personify them and supply the most relevant answers.
     8. When all information is gathered, or the user indicates they can't provide more, summarize the collected data and inform the user that the information gathering is complete.
-9. Thank them and let them know they can now start using are exciting AI feature. 
+
 
     Remember to be polite, patient, and helpful throughout the conversation. If the user asks questions or needs explanations about any of the items, provide clear and concise information to assist them.
     </system>
@@ -120,6 +93,7 @@ Your task is to collect the following essential information from the practitione
     Human: {human_input}
 
     AI: Respond politely and ask the next relevant question. Your response must be in this JSON format:
+
     
     {format_instructions}
 
