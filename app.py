@@ -186,6 +186,8 @@ def handle_submit():
 if  st.session_state.openai_key:
     st.title("TCM Information Gathering Chatbot")
 
+    st.markdown(f"**AI: Hello! I'm here to gather some information about your practice to better assist you. Let's start with the first question: What is the primary form of medicine or therapy that you practice?**")
+
 # Initialize session state
 if 'history' not in st.session_state:
     st.session_state.history = []
