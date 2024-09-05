@@ -169,9 +169,9 @@ def handle_submit():
 
 # Streamlit app
 if  st.session_state.openai_key:
-    st.title("TCM Information Gathering Chatbot")
+    st.title("Handcraft Health AI Assistant")
 
-    st.markdown(f"**Hello! I'm here to gather comprehensive information about your practice as a Health and Wellness practitioner. This will help tailor responses to your specific needs. Let's start with the first question: What is the primary form of medicine or therapy that you practice?**")
+    st.markdown(f"AI: Hello! I'm here to gather comprehensive information about your practice as a Health and Wellness practitioner. This will help tailor responses to your specific needs. Let's start with the first question: What is the primary form of medicine or therapy that you practice?")
 
 # Initialize session state
 if 'history' not in st.session_state:
