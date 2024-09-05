@@ -10,25 +10,10 @@ import os
 from streamlit_extras.switch_page_button import switch_page
 
 
-st.set_page_config(initial_sidebar_state="collapsed")
+
 if 'openai_key' not in st.session_state:
     st.session_state.openai_key = st.secrets.get("openai", {}).get("api_key")
 
-
-
-
-
-
-st.markdown(
-    """
-<style>
-    [data-testid="collapsedControl"] {
-        display: none
-    }
-</style>
-""",
-    unsafe_allow_html=True,
-)
 
 class ChatbotResponse(BaseModel):
     response: str = Field(description="The AI's response to the user")
@@ -186,7 +171,7 @@ def handle_submit():
 if  st.session_state.openai_key:
     st.title("TCM Information Gathering Chatbot")
 
-    st.markdown(f"**AI: Hello! I'm here to gather some information about your practice to better assist you. Let's start with the first question: What is the primary form of medicine or therapy that you practice?**")
+    st.markdown(f"**Hello! I'm here to gather comprehensive information about your practice as a Health and Wellness practitioner. This will help tailor responses to your specific needs. Let's start with the first question: What is the primary form of medicine or therapy that you practice?**")
 
 # Initialize session state
 if 'history' not in st.session_state:
@@ -232,5 +217,5 @@ if not st.session_state.conversation_active:
     for key, value in st.session_state.collected_data.items():
         st.write(f"**{key}:** {value}")
     if st.button("Start Interaction", type='primary'):
-        switch_page("conversation")
+        switch_page("chat")
 

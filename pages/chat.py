@@ -7,22 +7,12 @@ from langchain_openai import ChatOpenAI
 from streamlit_extras.switch_page_button import switch_page
 
 
-if 'openai_key' not in st.session_state:
-    st.session_state.openai_key = st.secrets.get("openai", {}).get("api_key")
-st.set_page_config(initial_sidebar_state="collapsed")
+# Check if history exists and is not empty
+history = st.session_state.get('history')
 
-st.markdown(
-    """
-<style>
-    [data-testid="collapsedControl"] {
-        display: none
-    }
-</style>
-""",
-    unsafe_allow_html=True,
-)
 
-history=st.session_state.get('history')
+
+
 
 
 system_prompt_template = """
